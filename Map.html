@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="js/jquery.js"></script>
+    <script src="js/Echarts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts.min.js"></script>
+
+    <style>
+        #main {
+            width: 800px;
+            height: 800px;
+            border: 1px solid #ffd800;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+
+    </div>
+    <script>
+        //方式一
+      /*  $.post("Map.ashx", function (obj) {
+            var No = new Array();//学号数组
+            var Result = new Array();//成绩数组
+            var newObj = eval(obj); //转化json对象
+            for (var i = 0; i < newObj.length; i++) {
+                No.push(newObj[i].No);
+                Result.push(newObj[i].Result);
+            }
+
+            var myChart = echarts.init(document.getElementById('main'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '学生成绩统计'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['销量']
+                },
+                xAxis: {
+                    data: No//学号数组数据
+                },
+                yAxis: {},
+                series: [{
+                    name: '成绩',
+                    type: 'bar',
+                    data: Result
+                }]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        });*/
+
+        //方式二
+        $.ajax({
+            type: 'post',
+            url: 'Map.ashx',
+            success: function (obj) {
+                var No = new Array();
+                var Result = new Array();
+                var newObj = eval(obj);
+                for (var i = 0; i < newObj.length; i++) {
+                    No.push(newObj[i].No);
+                    Result.push(newObj[i].Result);
+                }
+
+                var myChart = echarts.init(document.getElementById('main'));
+
+                // 指定图表的配置项和数据
+                var option = {
+                    title: {
+                        text: '学生成绩统计'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['销量']
+                    },
+                    xAxis: {
+                        data: No
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '成绩',
+                        type: 'bar',
+                        data: Result
+                    }]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+        })
+    </script>
+</body>
+</html>

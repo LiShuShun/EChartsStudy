@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="js/jquery.js"></script>
+    <script src="js/Echarts.js"></script>
+</head>
+<body>
+    <div id="box">
+        <table>
+            <tr>
+                <td>搜索：</td>
+                <td><input type="text" id="txt-serch" value="" placeholder="输入学号或者名字" /></td>
+                <td><input type="button" name="" id="but-serch" value="搜索" /></td>
+            </tr>
+        </table>
+        <table cellpadding="10" id="tab" border="1">
+        </table>
+    </div>
+    <script>
+        $.post("ListTable1.ashx", function (obj) {
+            var html = "<tr><th>学号</th> <th>姓名</th> <th>性别</th> <th>成绩</th><th>操作</th></tr>";
+            var result = eval(obj);
+            for (var i = 0; i < result.length; i++) {
+                html += "<tr>"
+                html += "<td><input  name='name' type='text'  value='" + result[i].No + "'</td>"
+                html += "<td><input   name='name' type='text' value='" + result[i].Name + "'</td>"
+                html += "<td><input  name='name' type='text' value='" + result[i].Sex + "'</td>"
+                html += "<td><input  name='name'type='text' value='" + result[i].Result + "'</td>"
+                html += "<td><button class='but-del'>删除</button><button class='but-upd'>修改</button></td>"
+                html += "</tr>"
+            }
+
+            $("#tab").html(html)
+            $("input[name='name']").attr("disabled", true)
+            aa();
+            $("#but-serch").click(function (e) {
+                $.ajax({
+                    type: "GET",
+                    url: 'ListTable2.ashx',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: {
+                        "data": $("#txt-serch").val()
+                    },
+                    success: function (obj) {
+                        var html = "<tr><th>学号</th> <th>姓名</th> <th>性别</th> <th>成绩</th><th>操作</th></tr>";
+                        var result2 = eval(obj);
+                        for (var i = 0; i < result2.length; i++) {
+                            html += "<tr>"
+                            html += "<td><input  name='id' type='text'  value='" + result2[i].No + "'</td>"
+                            html += "<td><input   name='name' type='text' value='" + result2[i].Name + "'</td>"
+                            html += "<td><input  name='sex' type='text' value='" + result2[i].Sex + "'</td>"
+                            html += "<td><input  name='result'type='text' value='" + result2[i].Result + "'</td>"
+                            html += "<td><button class='but-del'>删除</button><button class='but-upd'>修改</button></td>"
+                            html += "</tr>"
+
+                        }
+
+                        $("#tab").html(html)
+                        $("input[name='name']").attr("disable", true)
+                        aa();
+                    }
+
+                })
+            })
+        })
+        function aa() {
+            $(".but-upd").click(function (e) {
+
+                if ($(this).html() == "修改") {
+                    $(this).html("更新");
+                    $(e.target.parentElement.parentElement.children[1].firstChild).attr("disable", false)
+                    $(e.target.parentElement.parentElement.children[2].firstChild).attr("disable", false)
+                    $(e.target.parentElement.parentElement.children[3].firstChild).attr("disable", false)
+
+                }
+                else {
+                    $(this).html("修改");
+
+                    $("input[name='name']").attr("disable", true)
+                }
+            })
+            $(".but-del").click(function (e) {
+                if (confirm("确定删除此信息？")) {
+                    $(e.target.parentElement.parentElement).remove();
+                }
+            })
+        }
+    </script>
+</body>
+</html>
